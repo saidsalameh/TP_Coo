@@ -5,9 +5,13 @@ from django.db import models
 class Departement(models.Model):
 	numero = models.IntegerField()
 	prix_m2 = models.IntegerField()
+	def __str__(self):
+		return self.numero
 
 class Ingredient(models.Model):
 	nom = models.CharField(max_length=100)
+	def __str__(self):
+		return self.nom
 
 class QuantiteIngredient(models.Model):
 	ingredient= models.ForeignKey(
@@ -17,10 +21,14 @@ class QuantiteIngredient(models.Model):
 					# related_name="+",
 				)	
 	quantite = models.IntegerField()
+	def __str__(self):
+		return self.quantite
 	
 class Machine(models.Model):
 	nom = models.CharField(max_length=100)
 	prix = models.IntegerField()
+	def __str__(self):	
+		return self.nom
 	
 class Action(models.Model):
 	machine = models.ForeignKey(
@@ -38,7 +46,8 @@ class Action(models.Model):
 					blank=True, null=True,
 					# related_name="+",
 				)
-	
+	def __str__(self):	
+		return self.machine
 	
 class Recette(models.Model):
 	nom = models.CharField(max_length=100)
@@ -48,7 +57,8 @@ class Recette(models.Model):
 					# blank=True, null=True,
 					# related_name="+",
 				)
-
+	def __str__(self):	
+		return self.nom
 
 
 	
@@ -63,7 +73,10 @@ class Usine(models.Model):
 	machines = models.ManyToManyField(Machine)
 	recettes = models.ManyToManyField(Recette)
 	stocks = models.ManyToManyField(QuantiteIngredient)
-	
+	def __str__(self):	
+		return self.departement
+	def __str__(self):	
+		return self.machine
 
 class Prix(models.Model):
 	ingredient= models.ForeignKey(
@@ -79,7 +92,8 @@ class Prix(models.Model):
 					# related_name="+",
 				)
 	prix = models.IntegerField()
-
+	def __str__(self):	
+		return self.prix
 
 
 
