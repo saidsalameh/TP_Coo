@@ -13,6 +13,7 @@ class Ingredient(models.Model):
 	nom = models.CharField(max_length=100)
 	def __str__(self):
 		return self.nom
+		
 
 class QuantiteIngredient(models.Model):
 	ingredient= models.ForeignKey(
@@ -60,8 +61,6 @@ class Recette(models.Model):
 				)
 	def __str__(self):	
 		return self.nom
-
-
 	
 class Usine(models.Model):
 	departement= models.ForeignKey(
@@ -70,13 +69,16 @@ class Usine(models.Model):
 					# blank=True, null=True,
 					# related_name="+",
 				)
-	chriffre = models.IntegerField()
+	taille = models.IntegerField()
 	machines = models.ManyToManyField(Machine)
 	recettes = models.ManyToManyField(Recette)
 	stocks = models.ManyToManyField(QuantiteIngredient)
-	
 	def __str__(self):	
 		return f"{self.departement}"
+	def costs(self):
+		cout = (self.machines.prix)+(self.taille)*(self.departement.prix_m2)+(self.stocks.ingredient.prix)*(self.stocks.quantite)
+		return f"prix de l'usine = {self.cout}"
+		
 
 class Prix(models.Model):
 	ingredient= models.ForeignKey(
@@ -96,8 +98,4 @@ class Prix(models.Model):
 		return str(self.prix)
 
 
-
-
-
-	
 	
