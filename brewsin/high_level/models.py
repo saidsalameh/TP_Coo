@@ -75,8 +75,8 @@ class Usine(models.Model):
 	stocks = models.ManyToManyField(QuantiteIngredient)
 	def __str__(self):	
 		return f"{self.departement}"
-	def costs(self):
-		cout = (self.machines.prix)+(self.taille)*(self.departement.prix_m2)+(self.stocks.ingredient.prix)*(self.stocks.quantite)
+	#def costs(self):
+		#cout = (self.machines.prix)+(self.taille)*(self.departement.prix_m2)+(self.stocks.ingredient.prix)*(self.stocks.quantite)
 		return f"prix de l'usine = {self.cout}"
 		
 
