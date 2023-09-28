@@ -26,6 +26,7 @@ class QuantiteIngredient(models.Model):
 	def __str__(self):
 		return str((f'{self.ingredient} x{self.quantite}'))
 	def costs(self,departement):
+		print(f"{self=} {departement=} {self.ingredient=}")
 		return self.ingredient.prix_set.get(departement__numero=departement).prix * self.quantite
 	
 class Machine(models.Model):
@@ -79,14 +80,14 @@ class Usine(models.Model):
 	stocks = models.ManyToManyField(QuantiteIngredient)
 	def costs_machines(self):
 		_somme = 0
-		for i in self.machines :
+		for i in self.machines.all() :
 			_somme = _somme + i.prix
 		return _somme
 		
 	def costs_stocks(self):
 		_somme = 0
-		for i in self.stocks :
-			_somme = _somme + (i.ingredient.prix) * (i.quantite)
+		for i in self.stocks.all() :
+			_somme = _somme + (i.costs(self.departement.numero)) * (i.quantite)
 		return _somme	
 			
 	def __str__(self):	
