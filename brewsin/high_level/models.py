@@ -13,7 +13,7 @@ class Ingredient(models.Model):
 	nom = models.CharField(max_length=100)
 	def __str__(self):
 		return self.nom
-		
+	
 
 class QuantiteIngredient(models.Model):
 	ingredient= models.ForeignKey(
@@ -25,12 +25,16 @@ class QuantiteIngredient(models.Model):
 	quantite = models.IntegerField()
 	def __str__(self):
 		return str((f'{self.ingredient} x{self.quantite}'))
+	def costs(self,departement):
+		return self.ingredient.prix_set.get(departement__numero=departement).prix * self.quantite
 	
 class Machine(models.Model):
 	nom = models.CharField(max_length=100)
 	prix = models.IntegerField()
 	def __str__(self):	
 		return self.nom
+	def costs(self):
+		return self.prix
 	
 class Action(models.Model):
 	machine = models.ForeignKey(
@@ -73,12 +77,23 @@ class Usine(models.Model):
 	machines = models.ManyToManyField(Machine)
 	recettes = models.ManyToManyField(Recette)
 	stocks = models.ManyToManyField(QuantiteIngredient)
+	def costs_machines(self):
+		_somme = 0
+		for i in self.machines :
+			_somme = _somme + i.prix
+		return _somme
+		
+	def costs_stocks(self):
+		_somme = 0
+		for i in self.stocks :
+			_somme = _somme + (i.ingredient.prix) * (i.quantite)
+		return _somme	
+			
 	def __str__(self):	
 		return f"{self.departement}"
-	#def costs(self):
-		#cout = (self.machines.prix)+(self.taille)*(self.departement.prix_m2)+(self.stocks.ingredient.prix)*(self.stocks.quantite)
-		return f"prix de l'usine = {self.cout}"
-		
+	def costs(self):
+		return (self.departement.prix_m2 * self.taille) + self.costs_machines() + self.costs_stocks()
+
 
 class Prix(models.Model):
 	ingredient= models.ForeignKey(
@@ -87,7 +102,7 @@ class Prix(models.Model):
 					# blank=True, null=True,
 					# related_name="+",
 				)	
-	departement= models.ForeignKey(
+	departement = models.ForeignKey(
 					Departement, # ou "self"
 					on_delete=models.PROTECT,
 					# blank=True, null=True,
@@ -95,7 +110,7 @@ class Prix(models.Model):
 				)
 	prix = models.IntegerField()
 	def __str__(self):	
-		return str(self.prix)
-
+		return str(f"{self.ingredient} = {self.prix} euros dans le {self.departement} ")
+	
 
 	
