@@ -1,5 +1,5 @@
 from django.db import models
-
+# Version final Seance 2
 # Create your models here.
 
 class Departement(models.Model):
