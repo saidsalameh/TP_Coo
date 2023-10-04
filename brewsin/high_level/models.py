@@ -3,9 +3,6 @@
 from django.db import models
 from json import dumps
 
-
-
-
 # Create your models here.
 
 class Departement(models.Model):
@@ -16,7 +13,9 @@ class Departement(models.Model):
 		return str((f'Departement {self.numero}'))
 	def json(self):
 		return {"numero":self.numero,"prix_m2":self.prix_m2}
-		
+	def json_extended(self):
+	    return self.json()
+			
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#	
 	 
 class Ingredient(models.Model):
@@ -25,7 +24,9 @@ class Ingredient(models.Model):
 		return self.nom
 	def json(self):
 		return {"nom":self.nom}
-		
+    def json_extended(self):
+	    return self.json()
+	
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class QuantiteIngredient(models.Model):
 
@@ -43,8 +44,9 @@ class QuantiteIngredient(models.Model):
 		print(f"{self=} {departement=} {self.ingredient=}")
 		return self.ingredient.prix_set.get(departement__numero=departement).prix * self.quantite
 	def json(self):
-		return {"ingredient":self.ingredient,"quantite":self.quantite}
-		
+		return {"ingredient":self.ingredient.id,"quantite":self.quantite}
+	def json_extended(self):
+	    return {"ingredient":self.ingredient.json_extended,"quantite":self.quantite}	
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class Machine(models.Model):
 	nom = models.CharField(max_length=100)
@@ -55,7 +57,8 @@ class Machine(models.Model):
 		return self.prix
 	def json(self):
 		return {"nom":self.nom,"prix":self.prix}
-	
+    def json_extended(self):
+        return self.json()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 	
 class Action(models.Model):
@@ -77,8 +80,9 @@ class Action(models.Model):
 	def __str__(self):	
 		return self.commande
 	def json(self):
-		return {"machine":self.machine,"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients,"action1":self.action1}
-
+		return {"machine":self.machine,"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients.id,"action1":self.action1}
+    def json_extended(self):
+        return {"machine":self.machine.json_extended(),"commande":self.commande.json_extended(),"duree":self.duree.json_extended(),"ingredients":self.ingredients.json_extended()}
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Recette(models.Model):
@@ -93,6 +97,7 @@ class Recette(models.Model):
 		return self.nom
 	def json(self):
 		return {"nom":self.nom,"action1":self.action1}
+   
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 	
@@ -145,9 +150,18 @@ class Prix(models.Model):
 	def __str__(self):	
 		return str(f"{self.ingredient} = {self.prix} euros dans le {self.departement} ")
 	def json(self):
-		return {"ingredient":self.ingredient,"departement":self.departement,"prix":self.prix}
+		return {"ingredient":self.ingredient.id,"departement":self.departement,"prix":self.prix}
 	
 
+
+def json(self):
+    return{
+            "departement":self.departement.id,
+            "taille":self.taille,
+            "machine":[m.id for m in self.machine.all()],
+            "recette":[r.id for r in self.recette.all()],
+            "stocks":[s.id for s in self.stocks.all()],
+    }
 
 
 
