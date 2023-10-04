@@ -1,5 +1,11 @@
+#Librairie à importer
+
 from django.db import models
-# Version final Seance 2
+from json import dumps
+
+
+
+
 # Create your models here.
 
 class Departement(models.Model):
@@ -8,14 +14,22 @@ class Departement(models.Model):
 	
 	def __str__(self):
 		return str((f'Departement {self.numero}'))
-
+	def json(self):
+		return {"numero":self.numero,"prix_m2":self.prix_m2}
+		
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#	
+	 
 class Ingredient(models.Model):
 	nom = models.CharField(max_length=100)
 	def __str__(self):
 		return self.nom
-	
-
+	def json(self):
+		return {"nom":self.nom}
+		
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class QuantiteIngredient(models.Model):
+
+
 	ingredient= models.ForeignKey(
 					Ingredient, # ou "self"
 					on_delete=models.PROTECT,
@@ -28,7 +42,10 @@ class QuantiteIngredient(models.Model):
 	def costs(self,departement):
 		print(f"{self=} {departement=} {self.ingredient=}")
 		return self.ingredient.prix_set.get(departement__numero=departement).prix * self.quantite
-	
+	def json(self):
+		return {"ingredient":self.ingredient,"quantite":self.quantite}
+		
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class Machine(models.Model):
 	nom = models.CharField(max_length=100)
 	prix = models.IntegerField()
@@ -36,6 +53,10 @@ class Machine(models.Model):
 		return self.nom
 	def costs(self):
 		return self.prix
+	def json(self):
+		return {"nom":self.nom,"prix":self.prix}
+	
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 	
 class Action(models.Model):
 	machine = models.ForeignKey(
@@ -55,7 +76,11 @@ class Action(models.Model):
 				)
 	def __str__(self):	
 		return self.commande
-	
+	def json(self):
+		return {"machine":self.machine,"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients,"action1":self.action1}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 class Recette(models.Model):
 	nom = models.CharField(max_length=100)
 	action1 = models.ForeignKey(
@@ -66,6 +91,10 @@ class Recette(models.Model):
 				)
 	def __str__(self):	
 		return self.nom
+	def json(self):
+		return {"nom":self.nom,"action1":self.action1}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 	
 class Usine(models.Model):
 	departement= models.ForeignKey(
@@ -94,7 +123,10 @@ class Usine(models.Model):
 		return f"{self.departement}"
 	def costs(self):
 		return (self.departement.prix_m2 * self.taille) + self.costs_machines() + self.costs_stocks()
+	def json(self):
+		return {"departement":self.departement,"taille":self.taille,"machines":self.machines,"recettes":self.recettes,"stocks":self.stocks}
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Prix(models.Model):
 	ingredient= models.ForeignKey(
@@ -112,6 +144,12 @@ class Prix(models.Model):
 	prix = models.IntegerField()
 	def __str__(self):	
 		return str(f"{self.ingredient} = {self.prix} euros dans le {self.departement} ")
+	def json(self):
+		return {"ingredient":self.ingredient,"departement":self.departement,"prix":self.prix}
 	
+
+
+
+
 
 	

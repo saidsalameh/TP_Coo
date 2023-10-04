@@ -16,7 +16,51 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from high_level import views
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("Prix/<int:pk>",views.DepartementDetailView.as_view(),name="Prix",),
+
 ]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("Departement/<int:pk>",views.DepartementDetailView.as_view(),name="Departement",),
+
+]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("Ingredient/<int:pk>",views.DepartementDetailView.as_view(),name="Ingredient",),
+
+]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("QuantiteIngredient/<int:pk>",views.DepartementDetailView.as_view(),name="QuantiteIngredient",),
+
+]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("Machine/<int:pk>",views.DepartementDetailView.as_view(),name="Machine",),
+
+]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("Action/<int:pk>",views.DepartementDetailView.as_view(),name="Action",),
+
+]
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("Recette/<int:pk>",views.DepartementDetailView.as_view(),name="Recette",),
+
+]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("Usine/<int:pk>",views.DepartementDetailView.as_view(),name="Usine",),
+
+]
+
+
+
+
