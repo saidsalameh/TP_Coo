@@ -16,8 +16,11 @@ class Departement{
 		
 		//Departement(json& data):data{"numero"},data{"prix_m2"}{}
 		Departement(json& data){data["numero"];data["prix_m2"];}
-		Departement(int& id){
-		cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Departement/"+ std::string id}); 
+		Departement(int id){
+		cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Departement/"+ std::to_string(id)}); 
+		json j =json::parse(r.text);
+		numero = j["numero"];
+		prix_m2 = j["prix_m2"];
 		}
 		
 		friend std::ostream& operator << (
@@ -25,10 +28,10 @@ class Departement{
 		  return out << "Numero de Departement : " << p.numero << " / " << "Prix en m² : " << p.prix_m2; 
 		}
 
-		void to_json(json& data, const Departement& p) {
+		/*void to_json(json& data, const Departement& p) {
         data = json{{"numero", p.numero}, {"prix par m² ", p.prix_m2}};
-        }
-}
+        }*/
+};
 
 
 
@@ -38,12 +41,11 @@ auto main() -> int{
 	cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Departement/1"});
 	json j =json::parse(r.text);
 	
-	Departement{j};
-	
+	Departement d{1};
+	std::cout << "d : " << d << std::endl;
 	/*std::cout << "Dep num : " << numero1 << std::endl;
 	std::cout << "Dep prix : " << prix << std::endl;
 	std::cout << j;*/
-	
 	
 	return 0;
 }
