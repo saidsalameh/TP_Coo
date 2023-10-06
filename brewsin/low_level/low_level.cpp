@@ -12,25 +12,18 @@ class Departement{
 	float prix_m2;
 	
 	public:
-		//Departement(int x,float y) : numero{x}, prix_m2{y} {}
-		
-		//Departement(json& data):data{"numero"},data{"prix_m2"}{}
 		Departement(json& data){data["numero"];data["prix_m2"];}
 		Departement(int id){
-		cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Departement/"+ std::to_string(id)}); 
-		json j =json::parse(r.text);
-		numero = j["numero"];
-		prix_m2 = j["prix_m2"];
+			cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Departement/"+ std::to_string(id)}); 
+			json j =json::parse(r.text);
+			numero = j["numero"];
+			prix_m2 = j["prix_m2"];
 		}
 		
 		friend std::ostream& operator << (
 			std::ostream& out, const Departement& p) {
-		  return out << "Numero de Departement : " << p.numero << " / " << "Prix en m² : " << p.prix_m2; 
+		  	return out << "Numero de Departement : " << p.numero << " / " << "Prix en m² : " << p.prix_m2; 
 		}
-
-		/*void to_json(json& data, const Departement& p) {
-        data = json{{"numero", p.numero}, {"prix par m² ", p.prix_m2}};
-        }*/
 };
 
 
