@@ -25,17 +25,17 @@ urlpatterns = [
   
     path("Departement/<int:pk>",views.DepartementDetailView.as_view(),name="Departement",),
   
-    path("Ingredient/<int:pk>",views.DepartementDetailView.as_view(),name="Ingredient",),
+    path("Ingredient/<int:pk>",views.IngredientDetailView.as_view(),name="Ingredient",),
 
-    path("QuantiteIngredient/	 <int:pk>",views.DepartementDetailView.as_view(),name="QuantiteIngredient",),
+    path("QuantiteIngredient/<int:pk>",views.QuantiteIngredientDetailView.as_view(),name="QuantiteIngredient",),
   
-    path("Machine/<int:pk>",views.DepartementDetailView.as_view(),name="Machine",),
+    path("Machine/<int:pk>",views.MachineDetailView.as_view(),name="Machine",),
    
-    path("Action/<int:pk>",views.DepartementDetailView.as_view(),name="Action",),
+    path("Action/<int:pk>",views.ActionDetailView.as_view(),name="Action",),
 
-    path("Recette/<int:pk>",views.DepartementDetailView.as_view(),name="Recette",),
+    path("Recette/<int:pk>",views.RecetteDetailView.as_view(),name="Recette",),
 
-    path("Usine/<int:pk>",views.DepartementDetailView.as_view(),name="Usine",),
+    path("Usine/<int:pk>",views.UsineDetailView.as_view(),name="Usine",),
 
 ]
 

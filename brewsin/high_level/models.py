@@ -24,8 +24,8 @@ class Ingredient(models.Model):
 		return self.nom
 	def json(self):
 		return {"nom":self.nom}
-    def json_extended(self):
-	    return self.json()
+	def json_extended(self):
+		return self.json()
 	
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class QuantiteIngredient(models.Model):
@@ -57,8 +57,8 @@ class Machine(models.Model):
 		return self.prix
 	def json(self):
 		return {"nom":self.nom,"prix":self.prix}
-    def json_extended(self):
-        return self.json()
+	def json_extended(self):
+		return self.json()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 	
 class Action(models.Model):
@@ -81,8 +81,8 @@ class Action(models.Model):
 		return self.commande
 	def json(self):
 		return {"machine":self.machine,"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients.id,"action1":self.action1}
-    def json_extended(self):
-        return {"machine":self.machine.json_extended(),"commande":self.commande.json_extended(),"duree":self.duree.json_extended(),"ingredients":self.ingredients.json_extended()}
+	def json_extended(self):
+		return {"machine":self.machine.json_extended(),"commande":self.commande.json_extended(),"duree":self.duree.json_extended(),"ingredients":self.ingredients.json_extended()}
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Recette(models.Model):
