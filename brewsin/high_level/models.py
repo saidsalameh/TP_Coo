@@ -10,7 +10,7 @@ class Departement(models.Model):
 	prix_m2 = models.IntegerField()
 	
 	def __str__(self):
-		return str((f'Departement {self.numero}'))
+		return str((f"Departement {self.numero}"))
 	def json(self):
 		return {"numero":self.numero,"prix_m2":self.prix_m2}
 	def json_extended(self):
@@ -21,7 +21,7 @@ class Departement(models.Model):
 class Ingredient(models.Model):
 	nom = models.CharField(max_length=100)
 	def __str__(self):
-		return self.nom
+		return {self.nom}
 	def json(self):
 		return {"nom":self.nom}
 	def json_extended(self):
@@ -44,15 +44,15 @@ class QuantiteIngredient(models.Model):
 		print(f"{self=} {departement=} {self.ingredient=}")
 		return self.ingredient.prix_set.get(departement__numero=departement).prix * self.quantite
 	def json(self):
-		return {"ingredient":self.ingredient.id,"quantite":self.quantite}
+		return {"ingredient":self.ingredient,"quantite":self.quantite}
 	def json_extended(self):
-	    return {"ingredient":self.ingredient.json_extended,"quantite":self.quantite}	
+		return self.json()	
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class Machine(models.Model):
 	nom = models.CharField(max_length=100)
 	prix = models.IntegerField()
 	def __str__(self):	
-		return self.nom
+		return {self.nom}
 	def costs(self):
 		return self.prix
 	def json(self):
@@ -82,7 +82,7 @@ class Action(models.Model):
 	def json(self):
 		return {"machine":self.machine,"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients.id,"action1":self.action1}
 	def json_extended(self):
-		return {"machine":self.machine.json_extended(),"commande":self.commande.json_extended(),"duree":self.duree.json_extended(),"ingredients":self.ingredients.json_extended()}
+		return {"machine":self.machine.json_extended(),"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients}
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Recette(models.Model):
@@ -129,7 +129,7 @@ class Usine(models.Model):
 	def costs(self):
 		return (self.departement.prix_m2 * self.taille) + self.costs_machines() + self.costs_stocks()
 	def json(self):
-		return {"departement":self.departement,"taille":self.taille,"machines":self.machines,"recettes":self.recettes,"stocks":self.stocks}
+		return {"departement":self.departement.id,"taille":self.taille,"machines":self.machines.id,"recettes":self.recettes,"stocks":self.stocks}
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -148,20 +148,17 @@ class Prix(models.Model):
 				)
 	prix = models.IntegerField()
 	def __str__(self):	
-		return str(f"{self.ingredient} = {self.prix} euros dans le {self.departement} ")
+		return f"{self.ingredient.id} = {self.prix} euros dans le {self.departement}"
+
 	def json(self):
-		return {"ingredient":self.ingredient.id,"departement":self.departement,"prix":self.prix}
-	
-
-
-def json(self):
-    return{
-            "departement":self.departement.id,
-            "taille":self.taille,
-            "machine":[m.id for m in self.machine.all()],
-            "recette":[r.id for r in self.recette.all()],
-            "stocks":[s.id for s in self.stocks.all()],
+		return{
+		"departement": self.departement.id,
+		"ingredient": self.ingredient.id,
+		"prix": self.prix,
+		
     }
+	def json_extended(self):
+		return self.json()	
 
 
 
