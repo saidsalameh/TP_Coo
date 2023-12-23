@@ -44,9 +44,9 @@ class QuantiteIngredient(models.Model):
 		print(f"{self=} {departement=} {self.ingredient=}")
 		return self.ingredient.prix_set.get(departement__numero=departement).prix * self.quantite
 	def json(self):
-		return {"ingredient":self.ingredient,"quantite":self.quantite}
+		return {"ingredient":self.ingredient.id,"quantite":self.quantite}
 	def json_extended(self):
-		return self.json()	
+		return {"ingredient":self.ingredient.id,"quantite":self.quantite}	
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class Machine(models.Model):
 	nom = models.CharField(max_length=100)
@@ -78,11 +78,35 @@ class Action(models.Model):
 					# related_name="+",
 				)
 	def __str__(self):	
-		return self.commande
+		return f"{self.commande}"
 	def json(self):
-		return {"machine":self.machine,"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients.id,"action1":self.action1}
+		#return {"machine":self.machine.id,"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients.id,"action1":self.action1}
+		vec = {}
+		vec['machine'] = self.machine.id
+		vec['commande'] = self.commande
+		vec['duree'] = self.duree
+		
+		ingredientsid = []
+		for ingredient in self.ingredients.all() :
+			ingredientsid.append(ingredient.id)
+		vec['ingredients'] = ingredientsid
+
+		if self.action1 is not None :
+			vec['action'] = self.action1.id
+		return vec
 	def json_extended(self):
-		return {"machine":self.machine.json_extended(),"commande":self.commande,"duree":self.duree,"ingredients":self.ingredients}
+		vec = {}
+		vec['machine'] = self.machine.id
+		vec['commande'] = self.commande
+		vec['duree'] = self.duree
+		
+		ingredientsid = []
+		for ingredient in self.ingredients.all() :
+			ingredientsid.append(ingredient.id)
+		vec['ingredients'] = ingredientsid
+
+		if self.action is not None :
+			vec['action'] = self.action1.id
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Recette(models.Model):
@@ -96,8 +120,9 @@ class Recette(models.Model):
 	def __str__(self):	
 		return self.nom
 	def json(self):
-		return {"nom":self.nom,"action1":self.action1}
-   
+		return {"nom":self.nom,"action1":self.action1.id}
+	def json_extended(self):
+		return {"nom":self.nom,"action1":self.action1.json()}	   
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 	
